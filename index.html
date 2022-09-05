@@ -51,9 +51,174 @@
         var fileSelect = document.getElementById('fileSelect');
         var ExecuteButton = document.getElementById('ExecuteButton');
         var editorValue;
+        var editor;
+
+
+        //
+        // style iframe on load & reload
+        //
+        window.addEventListener('load', styleIframe);
+        iframe.addEventListener('load', styleIframe, true)
+
+        //
+        // execute code on button click
+        //
+        ExecuteButton.addEventListener('click', executeCode);
+
+        //
+        // execute code on shortcut ctrl + enter
+        //
+        window.addEventListener("keyup", (evt) => {
+            if (evt.key === "Enter" && evt.ctrlKey) {
+                executeCode();
+            }
+        });
+
+        //
+        // event for select menu to load new file
+        //
+        fileSelect.addEventListener("change", (element) => {
+            const file = element.target.value;
+            getFile(file);
+        });
+
+        //
+        // run init functions
+        //
+        getFileList();
+        getFile('default.php');
 
 
 
+        // 
+        // load monaco editor & config
+        //
+        function loadEditor(fileContent) {
+            require.config({
+                paths: {
+                    'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs'
+                }
+            });
+            require(["vs/editor/editor.main"], () => {
+                editor = monaco.editor.create(document.getElementById("MonacoEditor"), {
+                    value: fileContent,
+                    language: 'php',
+                    lineNumbers: "on",
+                    roundedSelection: true,
+                    scrollBeyondLastLine: true,
+                    readOnly: false,
+                    minimap: {
+                        enabled: false
+                    },
+                    automaticLayout: true,
+                    contextmenu: true,
+                    fontSize: 12,
+                    scrollbar: {
+                        useShadows: false,
+                        vertical: "hidden",
+                        horizontal: "visible",
+                        horizontalScrollbarSize: 12,
+                        verticalScrollbarSize: 0
+                    },
+                    theme: 'vs-dark',
+                });
+                // 
+                // editorValue = editor.getValue();
+                // editor.onDidChangeModelContent(() => {
+                //     editorValue = editor.getValue();
+                // });
+            });
+        }
+
+
+        //
+        // get content of file and load in editor
+        //
+        function getFile(file) {
+            fetch('./handle.php?getContent=' + file)
+                .then((response) => response.json())
+                .then((fileContent) => {
+                    // console.log(editor)
+                    // console.log(fileContent);
+                    if (!editor) {
+                        loadEditor(fileContent)
+
+                        setTimeout(() => {
+                            executeCode()
+                        }, 500);
+                    } else {
+                        editor.getModel().setValue(fileContent);
+                        executeCode();
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+
+        //
+        // get list of files from ./files/ folder for the select menu
+        //
+        function getFileList() {
+            fetch('./handle.php?fileList')
+                .then((response) => response.json())
+                .then((fileList) => {
+                    // console.log(fileList);
+                    fileSelect.innerHTML = fileList;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+
+
+
+
+
+
+        //
+        // add styles to iframe
+        //
+        function styleIframe() {
+            iframe.contentDocument.body.style.backgroundColor = "#1E1E1E";
+            iframe.contentDocument.body.style.color = "#AEAFAD";
+            iframe.contentDocument.body.style.fontFamily = "monospace";
+            iframe.contentDocument.body.style.fontSize = "16px";
+            iframe.contentDocument.body.style.whiteSpace = "pre-wrap";
+        }
+
+
+
+        //
+        // get code from editor.value and send it to handle.php to execute
+        //
+        function executeCode() {
+            fetch('handle.php?execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(editor.getValue()),
+                })
+                .then((response) => response.json())
+                .then((fileContent) => {
+                    // console.log(fileContent);
+                    iframe.contentDocument.location.reload(true);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+
+        //
+        // add resize function
+        //
         document.addEventListener('DOMContentLoaded', function() {
             // Query the element
             const resizer = document.getElementById('devider');
@@ -114,204 +279,12 @@
             // Attach the handler
             resizer.addEventListener('mousedown', mouseDownHandler);
         });
-
-
-        const mouseUpHandler = function() {
-            resizer.style.removeProperty('cursor');
-            document.body.style.removeProperty('cursor');
-
-            leftSide.style.removeProperty('user-select');
-            leftSide.style.removeProperty('pointer-events');
-
-            rightSide.style.removeProperty('user-select');
-            rightSide.style.removeProperty('pointer-events');
-
-            // Remove the handlers of `mousemove` and `mouseup`
-            document.removeEventListener('mousemove', mouseMoveHandler);
-            document.removeEventListener('mouseup', mouseUpHandler);
-        };
-
-
-        function loadEditor(fileContent) {
-            require.config({
-                paths: {
-                    'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs'
-                }
-            });
-            require(["vs/editor/editor.main"], () => {
-                const editor = monaco.editor.create(document.getElementById("MonacoEditor"), {
-                    value: fileContent,
-                    // value: `< ?php echo date("l jS \of F Y h:i:s A");`,
-                    language: 'php',
-                    lineNumbers: "on",
-                    roundedSelection: true,
-                    scrollBeyondLastLine: true,
-                    readOnly: false,
-                    minimap: {
-                        enabled: false
-                    },
-                    automaticLayout: true,
-                    contextmenu: true,
-                    fontSize: 12,
-                    scrollbar: {
-                        useShadows: false,
-                        vertical: "visible",
-                        horizontal: "visible",
-                        horizontalScrollbarSize: 12,
-                        verticalScrollbarSize: 12
-                    },
-                    theme: 'vs-dark',
-                });
-                editorValue = editor.getValue()
-
-                editor.onDidChangeModelContent(() => {
-                    editorValue = editor.getValue();
-                });
-            });
-        }
-
-
-        function getFile(file) {
-            fetch('./handle.php?getContent=' + file)
-                .then((response) => response.json())
-                .then((fileContent) => {
-                    // console.log(fileContent);
-                    loadEditor(fileContent);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        }
-
-        function getFileList() {
-            fetch('./handle.php?fileList')
-                .then((response) => response.json())
-                .then((fileList) => {
-                    // console.log(fileList);
-                    fileSelect.innerHTML = fileList;
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        }
-        getFileList();
-        getFile('default.php');
-
-
-        fileSelect.addEventListener("change", (element) => {
-            console.log(element.target.value)
-            const file = element.target.value;
-            getFile(file);
-        });
-
-
-
-        //
-        // style iframe on load $ reload
-        //
-        window.addEventListener('load', styleIframe);
-        iframe.addEventListener('load', styleIframe, true)
-
-        //
-        // execute code on button click
-        //
-        ExecuteButton.addEventListener('click', executeCode);
-
-        //
-        // execute code on shortcut ctrl + enter
-        //
-        window.addEventListener("keyup", (evt) => {
-            if (evt.key === "Enter" && evt.ctrlKey) {
-                executeCode();
-            }
-        });
-
-
-
-
-
-        function styleIframe() {
-            iframe.contentDocument.body.style.backgroundColor = "#1E1E1E";
-            iframe.contentDocument.body.style.color = "#AEAFAD";
-            iframe.contentDocument.body.style.fontFamily = "monospace";
-            iframe.contentDocument.body.style.fontSize = "16px";
-            iframe.contentDocument.body.style.whiteSpace = "pre-wrap";
-        }
-
-
-        function executeCode() {
-            fetch('handle.php?execute', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(editorValue),
-                })
-                .then((response) => response.json())
-                .then((fileContent) => {
-                    // console.log(fileContent);
-                    iframe.contentDocument.location.reload(true);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        }
     </script>
 
 
 </body>
 <style>
-    main {
-        display: flex;
-    }
-    
-    iframe,
-    #MonacoEditor {
-        width: calc((var(--width) - 35px) / 2);
-        /* max-width: calc((100vw - 35px) / 2); */
-        height: calc(100vh - var(--header-height) - var(--footer-height));
-        border: 1px solid black;
-        border-radius: 10px;
-    }
-    
-    #devider {
-        width: 25px;
-        height: calc(100vh - var(--header-height));
-        cursor: grab;
-    }
-    
-    body>footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 25px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        background: var(--footer-bg-color);
-    }
-    
-    footer .withLove {
-        position: relative;
-        bottom: 1px;
-        right: 1rem;
-    }
-    
-    footer .withLove a {
-        font-size: .8rem;
-        color: var(--text-color)
-    }
-    
-    footer .withLove img {
-        position: relative;
-        bottom: 2px;
-    }
-    
-    footer .withLove svg {
-        height: 0.7rem;
-        position: relative;
-        top: 2px;
-    }
+
 </style>
 
 </html>

@@ -11,6 +11,5 @@ echo'<br>';
 $colors = array("red", "green", "blue", "yellow");
 echo'<br>';
 foreach ($colors as $value) {
-    echo "$value d<br>";
-echo'<br>';
+    echo "$value <br>";
 }
