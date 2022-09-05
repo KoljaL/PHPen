@@ -1,1 +1,4 @@
-<?php echo date("l jS of F Y h:i:s A");
+<?php
+
+echo date("l jS of F Y h:i:s A");
+echo "test";
