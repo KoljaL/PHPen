@@ -3,7 +3,7 @@
 :root {
     --rem: 12pt;
     --width: 90rem;
-    --header-height: 80px;
+    --header-height: 60px;
     --footer-height: 30px;
     /* fixed | absolute */
     --font-p: 1em/1.7 'Open Sans', 'DejaVu Sans', FreeSans, Helvetica, sans-serif;
@@ -17,9 +17,22 @@
     --cdark: #999;
     --clight: #333;
     --cmed: #566;
-    --clink: #1ad;
+    --clink: #7175AA;
     --cemph: #0b9;
     --cemphbg: #0b91;
+}
+
+
+/* scrollbar */
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    box-sizing: border-box;
 }
 
 
@@ -85,7 +98,7 @@ html {
 body {
     position: relative;
     margin: auto;
-    max-width: var(--width);
+    /* max-width: var(--width); */
     font: var(--font-p);
     color: var(--cfg);
     overflow-x: hidden;
@@ -95,29 +108,75 @@ body {
 body>header {
     position: relative;
     height: var(--header-height);
+    max-width: var(--width);
     top: 0;
     left: 0;
     right: 0;
     margin: 0;
+    margin-inline: auto;
+    /* margin-bottom: 1rem; */
     z-index: 41;
+    background: #1E1E1E;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 body>header>h1 {
     margin: 10px 10px 10px 10px;
 }
 
+body>header>nav {
+    width: max-content;
+}
+
 body>main {
-    height: calc(100vh - var(--header-height) - var(--footer-height));
+    position: relative;
+    top: 1rem;
+    display: flex;
+    max-width: var(--width);
+    margin-inline: auto;
+    height: calc(100vh - var(--header-height) - var(--footer-height) - 1rem);
+}
+
+iframe,
+#MonacoEditor {
+    width: calc((var(--width) - 35px) / 2);
+    height: calc(100vh - var(--header-height) - var(--footer-height) - 1rem);
+    border: 1px solid black;
+    border-radius: 10px;
+    background: #1E1E1E;
+}
+
+#MonacoEditor {
+    padding-top: 1rem;
+    padding-right: 1rem;
+}
+
+iframe {
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+}
+
+#devider {
+    width: 20px;
+    height: calc(100vh - var(--header-height) - var(--footer-height) - 1rem);
+    cursor: grab;
 }
 
 body>footer {
     height: var(--footer-height);
-    position: absolute;
-    bottom: 0px;
+    max-width: var(--width);
+    position: relative;
+    top: 1rem;
     font-size: 90%;
     margin: 0;
+    margin-inline: auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
 }
 
 p {
@@ -353,10 +412,6 @@ time {
 hr {
     border: 0;
     border-top: 0.1rem solid var(--cmed);
-}
-
-nav {
-    width: 100%;
 }
 
 ::selection,
@@ -680,30 +735,34 @@ select {
     font: var(--font-h);
     font-size: 1.1rem;
     border-radius: 4px;
-    border: 1.5px solid var(--cmed);
     padding: 0.4em 0.8em 0.1em 0.8em;
+    line-height: 1.5rem;
 }
 
 fieldset select,
 input:not([type=checkbox]):not([type=radio]) {
     /* display: block; */
     /* width: 100%; */
-    margin: 0 0 1rem;
+    /* margin: 0 0 1rem; */
     background: var(--clight);
     color: var(--cfg);
 }
 
 button,
+input,
 select {
-    font-weight: bold;
     background-color: var(--clight);
     margin: .5em;
     border: 1.5px solid var(--clink);
 }
 
+select {
+    padding: .55rem .4rem .3rem .4rem;
+}
+
 button {
     padding: 0.4em 1em 0.1em 1em;
-    font-size: 85%;
+    /* font-size: 85%; */
     letter-spacing: 0.1em;
 }
 
@@ -744,39 +803,15 @@ p>select {
 
 /* CUSTOM */
 
-main {
-    display: flex;
-}
-
-iframe,
-#MonacoEditor {
-    width: calc((var(--width) - 35px) / 2);
-    /* max-width: calc((100vw - 35px) / 2); */
-    height: calc(100vh - var(--header-height) - var(--footer-height));
-    border: 1px solid black;
-    border-radius: 10px;
-}
-
-#devider {
-    width: 25px;
-    height: calc(100vh - var(--header-height));
-    cursor: grab;
-}
-
-body>footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 25px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    background: var(--footer-bg-color);
+#Logo {
+    color: #7175AA;
+    padding-left: 1rem;
+    font-size: 2rem;
 }
 
 footer .withLove {
     position: relative;
-    bottom: 1px;
+    top: 4px;
     right: 1rem;
 }
 

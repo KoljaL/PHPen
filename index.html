@@ -11,21 +11,23 @@
 <body>
 
     <header>
+        <div id="Logo">PHPen</div>
         <nav>
-            <lable>Filename
-                <input type=text>
-            </lable>
             <button id=ExecuteButton>RUN</button>
-            <lable>select File
-                <select id="fileSelect"></select>
-            </lable>
+            <input type=text placeholder="Filename">
+            <select id="fileSelect"></select>
+
         </nav>
+        <div id="Logout">&nbsp;</div>
     </header>
-    <main style="display:flex">
+
+    <main>
         <div id="MonacoEditor"></div>
         <div id=devider>&nbsp;</div>
         <iframe id=iframe src="./files/_output.php" style="flex: 1 1 0%;" frameborder="0"></iframe>
     </main>
+
+
     <footer>
         <div class="withLove">
             <a href="https://github.com/KoljaL/PHPen" title="Link to Github Repository" target="_blank">
@@ -50,7 +52,6 @@
         var iframe = document.getElementById('iframe');
         var fileSelect = document.getElementById('fileSelect');
         var ExecuteButton = document.getElementById('ExecuteButton');
-        var editorValue;
         var editor;
 
 
@@ -112,7 +113,7 @@
                     },
                     automaticLayout: true,
                     contextmenu: true,
-                    fontSize: 12,
+                    fontSize: 14,
                     scrollbar: {
                         useShadows: false,
                         vertical: "hidden",
@@ -122,11 +123,6 @@
                     },
                     theme: 'vs-dark',
                 });
-                // 
-                // editorValue = editor.getValue();
-                // editor.onDidChangeModelContent(() => {
-                //     editorValue = editor.getValue();
-                // });
             });
         }
 
@@ -145,7 +141,7 @@
 
                         setTimeout(() => {
                             executeCode()
-                        }, 500);
+                        }, 700);
                     } else {
                         editor.getModel().setValue(fileContent);
                         executeCode();
