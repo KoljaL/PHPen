@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>PHPen</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAdpJREFUaIHlmm1uwzAIhiHaJdp7ZfdIpfYQmZTeI71j2Z9Z8rzYBgOOrL2/2jTBmMfgjxThR0SEt8frDQNoW+cJEQkAYAIAIKLLKM4DANwerzcRXQAAcKTIp9rWecLlvtPZjmg0ne2AVsN34MPL8PPr89f35b67tONCIHU+d81CpgRqTobfLWmYEZBE2JKGmkBprB9FPFyzoqEi0JKo6T1aGk0EtBUm3G9BQ0zAsjxa0GAT8KrrWhosAj0mpVYaRQK9ZtPUvoRGlkBv50ttlWi4rIXSBj1m4KBDApq1TOk+jY3cs6IyWnPuaNgdDQeLTgZVhxAnsWr5ktoInzk2ah1i58By3/84kLvP00YqURKXosJt1MJGrP+1peQkXy2KFjZisQnkKoxk0rGwkerwXKhkoBQdbiWR2Kg9J8qBGlpOzZfaqCl7MqddC/V63q0KxQ16LgSzHZAuAawkHXZFAtoKIRVnLZWKNYS8abQkexA7B7xotEQ9ljiJrWhooh6rqQppaWijHktVRls2K9Z7bbNXTNJhZDU3mE1kEocsJzbTU4naNrDbqYRWR456LSfc3pH1Oggbfks5fge2dR62E9s6TxMi0rbO17OdkWpb5ysiEoYLI/3pI/67zTedx0h7KK4XJQAAAABJRU5ErkJggg=="
+    />
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" fileContent-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.min.css">
 </head>
@@ -16,7 +18,7 @@
             <button id=ExecuteButton>RUN</button>
             <input id=newFile type=text value="" placeholder="Filename">
             <select id="fileSelect"></select>
-
+            <button id=DeleteButton>X</button>
         </nav>
         <div id="Logout">&nbsp;</div>
     </header>
@@ -53,6 +55,7 @@
         var fileSelect = document.getElementById('fileSelect');
         var ExecuteButton = document.getElementById('ExecuteButton');
         var newFile = document.getElementById('newFile');
+        var DeleteButton = document.getElementById('DeleteButton');
         var currentFile = 'default.php';
         var editor;
 
@@ -92,6 +95,24 @@
             getFile(currentFile);
             newFile.value = currentFile;
             window.location.hash = currentFile;
+        });
+
+        //
+        // delete currentFile
+        //
+        DeleteButton.addEventListener("click", (evt) => {
+            // console.log(currentFile)
+
+            fetch('./handle.php?deleteFile=' + currentFile)
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data)
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+
+
         });
 
         //

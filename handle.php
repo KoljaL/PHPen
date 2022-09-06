@@ -46,9 +46,23 @@ if (isset($_GET['execute'])) {
 // read file content to fill in editor
 //
 if (isset($_GET['getContent'])) {
-    $file = $_GET['getContent'];
+    if (is_file('./files/'.$_GET['getContent'])) {
+        $file = $_GET['getContent'];
+    } else {
+        $file = 'default.php';
+    }
     $fileContent = file_get_contents('./files/'.$file);
     echo json_encode($fileContent);
+}
+
+
+//
+// delete file
+//
+if (isset($_GET['deleteFile'])) {
+    $file = $_GET['deleteFile'];
+    unlink('./files/'.$file);
+    echo json_encode('deleted');
 }
 
 
