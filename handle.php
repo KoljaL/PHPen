@@ -18,7 +18,7 @@ $display_errors = <<<PHP
 // }
 // ini_set("error_log", "./error.log");
 // ------------ //
-echo "<h1 style='color:#7175AA; margin:0;'>PHPen</h1>";
+echo "<h1>PHPen</h1>";
 echo "<br>";
 PHP;
 
@@ -36,6 +36,7 @@ if (isset($_GET['execute'])) {
     // add a line break to empty lines
     $data = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\necho'<br>';\n", $data);
     $data = str_replace('<?php', $display_errors, $data);
+
     file_put_contents('./files/_output.php', $data);
     echo json_encode($data);
 }

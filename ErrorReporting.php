@@ -111,7 +111,7 @@ class ErrorReporting
         // error_log("$errorType: $exceptionType: $exceptionMessage in $filename:$lineNumber");
 
         if (static::$debug) {
-            $lineNumber = $lineNumber -11;
+            $lineNumber = $lineNumber -7;
             echo "<br />\n<b style='color:#be1100;'>$errorType</b> -> ";
             echo "<b style='color:#cca700;'>$exceptionType</b><br>";
             echo "$exceptionMessage on line <b>$lineNumber</b><br />\n";

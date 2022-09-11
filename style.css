@@ -26,10 +26,6 @@
 
 /* scrollbar */
 
-.errorReporting .error {
-    color: var(--font-error);
-}
-
 ::-webkit-scrollbar {
     display: none;
 }

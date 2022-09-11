@@ -1,21 +1,21 @@
 <?php
+ 
 
-echo "<h1>PHPen</h1>";
-
+h1('Überschrift in groß');
 echo date("l jS of F Y h:i:s A");
+ 
+
 
 
 $txt1 = "Learn PHP";
 $txt2 = "W3Schools.com";
-$x = 5;
-$y = 4;
-
-print "<h2>" . $txt1 . "</h2>";
+ 
+ 
+h2($txt1);
 print "Study PHP at " . $txt2 . "<br>";
-print $x + $y;
 
 $colors = array("red", "green", "blue", "yellow"); 
-print "<h2>Colors</h2>";
+h2('Colors');
 foreach ($colors as $value) {
   echo "$value <br>";
 }
@@ -26,5 +26,6 @@ $movies =array(
 "epic" => array("The Lord of the rings"),
 "Romance" => array("Romeo and Juliet")
 );
-print "<h2>Nice Array printing</h2>";
+
+h2('Nice Array printing');
 print_r($movies);
