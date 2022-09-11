@@ -20,10 +20,15 @@
     --clink: #7175AA;
     --cemph: #0b9;
     --cemphbg: #0b91;
+    --font-error: #be1100;
 }
 
 
 /* scrollbar */
+
+.errorReporting .error {
+    color: var(--font-error);
+}
 
 ::-webkit-scrollbar {
     display: none;

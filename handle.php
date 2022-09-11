@@ -1,24 +1,24 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 //
 // this code ist added before the code from the editor
 // for displaying errors or whatever
 $display_errors = <<<PHP
-<?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-ini_set("log_errors", 1);
-if (is_file('./error.log')) {
-    // unlink('./error.log');
-}
-ini_set("error_log", "./error.log");
+<?php 
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+// ini_set("log_errors", 1);
+// if (is_file('./error.log')) {
+//     // unlink('./error.log');
+// }
+// ini_set("error_log", "./error.log");
 // ------------ //
-echo "<h1 style='color:#7175AA;'>PHPen</h1>";
+echo "<h1 style='color:#7175AA; margin:0;'>PHPen</h1>";
 echo "<br>";
 PHP;
 
